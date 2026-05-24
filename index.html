@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>年度高光时刻 · Year in Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;700&family=ZCOOL+QingKe+HuangYou&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #0a0418;
+    --bg-mid: #1a0b2e;
+    --neon-pink: #ff2e97;
+    --neon-magenta: #f72585;
+    --neon-cyan: #4cc9f0;
+    --neon-purple: #b5179e;
+    --neon-gold: #ffd60a;
+    --neon-orange: #ff8500;
+    --text-warm: #fff5e6;
+    --text-dim: #b8a8d4;
+    --grid-line: rgba(255, 46, 151, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-warm);
+    font-family: 'Noto Sans SC', 'JetBrains Mono', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* 背景:夕阳渐变 + 网格地平线 */
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(255, 46, 151, 0.35) 0%, transparent 50%),
+      radial-gradient(ellipse at 30% 0%, rgba(76, 201, 240, 0.18) 0%, transparent 50%),
+      linear-gradient(180deg, #0a0418 0%, #1a0b2e 50%, #2d0f47 100%);
+  }
+
+  /* 复古网格地板 */
+  .grid-floor {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) perspective(400px) rotateX(60deg);
+    width: 200vw;
+    height: 50vh;
+    background:
+      linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 60px 60px,
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 60px 60px;
+    z-index: -1;
+    animation: gridMove 8s linear infinite;
+    mask-image: linear-gradient(180deg, transparent 0%, black 50%);
+  }
+
+  @keyframes gridMove {
+    from { background-position: 0 0, 0 0; }
+    to { background-position: 0 60px, 60px 0; }
+  }
+
+  /* 噪点纹理 */
+  .noise {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* 扫描线 */
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(0, 0, 0, 0.08) 3px,
+      transparent 4px
+    );
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    position: relative;
+  }
+
+  /* === HERO === */
+  .hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    color: var(--neon-cyan);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeIn 0.8s 0.2s ease forwards;
+  }
+
+  .hero-tag::before { content: '> '; }
+  .hero-tag::after {
+    content: '_';
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  .hero-title {
+    font-family: 'Bungee', cursive;
+    font-size: clamp(3rem, 9vw, 7rem);
+    line-height: 1;
+    margin-bottom: 1rem;
+    color: var(--text-warm);
+    text-shadow:
+      0 0 20px var(--neon-pink),
+      0 0 40px var(--neon-pink),
+      0 0 80px rgba(255, 46, 151, 0.5);
+    opacity: 0;
+    animation: glowIn 1s 0.4s ease forwards;
+  }
+
+  .hero-title .gradient {
+    background: linear-gradient(135deg, var(--neon-pink), var(--neon-gold), var(--neon-cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 15px rgba(255, 46, 151, 0.6));
+  }
+
+  @keyframes glowIn {
+    from { opacity: 0; transform: translateY(20px); filter: blur(20px); }
+    to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  .hero-subtitle {
+    font-family: 'ZCOOL QingKe HuangYou', cursive;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    color: var(--neon-cyan);
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeIn 0.8s 0.7s ease forwards;
+    text-shadow: 0 0 20px rgba(76, 201, 240, 0.6);
+  }
+
+  .hero-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 900;
+    color: var(--neon-gold);
+    margin: 1rem 0;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 30px rgba(255, 214, 10, 0.8);
+    opacity: 0;
+    animation: fadeIn 0.8s 0.9s ease forwards;
+  }
+
+  .hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    opacity: 0;
+    animation: fadeIn 0.8s 1.1s ease forwards;
+  }
+
+  .hero-meta span {
+    border: 1px solid var(--grid-line);
+    padding: 0.5rem 1.2rem;
+    background: rgba(255, 46, 151, 0.05);
+    backdrop-filter: blur(10px);
+  }
+
+  /* === STATS BANNER === */
+  .stats-banner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin: 4rem 0;
+    padding: 3rem 2rem;
+    border-top: 2px solid var(--neon-pink);
+    border-bottom: 2px solid var(--neon-cyan);
+    background: linear-gradient(90deg, rgba(255, 46, 151, 0.1), rgba(76, 201, 240, 0.1));
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stats-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent 0,
+      transparent 40px,
+      rgba(255, 46, 151, 0.03) 40px,
+      rgba(255, 46, 151, 0.03) 80px
+    );
+    z-index: 0;
+  }
+
+  .stat {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat-number {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(180deg, var(--neon-gold), var(--neon-orange));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(255, 214, 10, 0.5));
+  }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 0.5rem;
+  }
+
+  .stat-zh {
+    font-family: 'ZCOOL QingKe HuangYou', cursive;
+    font-size: 1.1rem;
+    color: var(--neon-cyan);
+    margin-top: 0.3rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* === SECTION HEADER === */
+  .section-header {
+    text-align: center;
+    margin: 6rem 0 3rem;
+    position: relative;
+  }
+
+  .section-header::before,
+  .section-header::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 80px;
+    height: 1px;
+    background: var(--neon-pink);
+    box-shadow: 0 0 10px var(--neon-pink);
+  }
+
+  .section-header::before { left: calc(50% - 200px); }
+  .section-header::after { right: calc(50% - 200px); }
+
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-title {
+    font-family: 'ZCOOL QingKe HuangYou', cursive;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--text-warm);
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 20px rgba(255, 245, 230, 0.3);
+  }
+
+  /* === ACHIEVEMENT CARDS === */
+  .achievements {
+    display: grid;
+    gap: 3rem;
+    margin: 3rem 0;
+  }
+
+  .achievement {
+    background: linear-gradient(135deg, rgba(26, 11, 46, 0.8), rgba(45, 15, 71, 0.6));
+    border: 1px solid rgba(255, 46, 151, 0.3);
+    padding: 3rem;
+    position: relative;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s ease;
+    overflow: hidden;
+  }
+
+  .achievement::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-pink), var(--neon-cyan), transparent);
+  }
+
+  .achievement::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at top right, rgba(255, 214, 10, 0.2), transparent 70%);
+  }
+
+  .achievement:hover {
+    transform: translateY(-5px);
+    border-color: var(--neon-pink);
+    box-shadow:
+      0 20px 40px rgba(255, 46, 151, 0.2),
+      0 0 60px rgba(76, 201, 240, 0.1);
+  }
+
+  .achievement-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .achievement-badge {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .badge-academic {
+    background: linear-gradient(135deg, var(--neon-gold), var(--neon-orange));
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    box-shadow: 0 0 30px rgba(255, 214, 10, 0.6);
+  }
+
+  .badge-business {
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    box-shadow: 0 0 30px rgba(76, 201, 240, 0.6);
+  }
+
+  .achievement-badge svg {
+    width: 40px;
+    height: 40px;
+    color: var(--bg-deep);
+    z-index: 1;
+  }
+
+  .achievement-title-block {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .achievement-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--neon-cyan);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.3rem;
+  }
+
+  .achievement-title {
+    font-family: 'ZCOOL QingKe HuangYou', cursive;
+    font-size: 2rem;
+    color: var(--text-warm);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .achievement-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--neon-pink);
+    letter-spacing: 0.1em;
+  }
+
+  .achievement-body {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-dim);
+    margin-bottom: 2rem;
+  }
+
+  .achievement-stats {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding-top: 2rem;
+    border-top: 1px dashed rgba(255, 46, 151, 0.3);
+  }
+
+  .achievement-stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .achievement-stat-val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--neon-gold);
+  }
+
+  .achievement-stat-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* 成绩单视觉 */
+  .grade-row {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  .grade {
+    width: 50px;
+    height: 60px;
+    border: 2px solid var(--neon-gold);
+    background: rgba(255, 214, 10, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bungee', cursive;
+    font-size: 1.5rem;
+    color: var(--neon-gold);
+    box-shadow: 0 0 15px rgba(255, 214, 10, 0.4);
+    position: relative;
+  }
+
+  .grade.minus {
+    border-color: var(--neon-orange);
+    color: var(--neon-orange);
+    box-shadow: 0 0 15px rgba(255, 133, 0, 0.4);
+    background: rgba(255, 133, 0, 0.1);
+  }
+
+  .grade::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid currentColor;
+    opacity: 0.4;
+  }
+
+  /* GPU视觉 */
+  .gpu-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  .gpu {
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.15), rgba(181, 23, 158, 0.15));
+    border: 1px solid var(--neon-cyan);
+    padding: 1rem 1.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--neon-cyan);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 0 0 15px rgba(76, 201, 240, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .gpu:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(76, 201, 240, 0.4);
+  }
+
+  .gpu-icon {
+    width: 8px;
+    height: 8px;
+    background: var(--neon-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--neon-cyan);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* === DAD MESSAGE === */
+  .message-card {
+    margin: 6rem 0 3rem;
+    padding: 3rem;
+    background:
+      linear-gradient(135deg, rgba(255, 46, 151, 0.08), rgba(76, 201, 240, 0.08)),
+      var(--bg-mid);
+    border: 1px solid var(--neon-pink);
+    position: relative;
+    text-align: center;
+  }
+
+  .message-card::before,
+  .message-card::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--neon-gold);
+  }
+
+  .message-card::before {
+    top: -2px;
+    left: -2px;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .message-card::after {
+    bottom: -2px;
+    right: -2px;
+    border-left: none;
+    border-top: none;
+  }
+
+  .message-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .message-text {
+    font-family: 'ZCOOL QingKe HuangYou', cursive;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    line-height: 1.8;
+    color: var(--text-warm);
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .message-signature {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--neon-pink);
+    letter-spacing: 0.2em;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+  }
+
+  /* === FOOTER === */
+  .footer {
+    text-align: center;
+    padding: 4rem 2rem 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    letter-spacing: 0.2em;
+  }
+
+  .footer-glow {
+    font-family: 'Bungee', cursive;
+    font-size: 1.5rem;
+    background: linear-gradient(90deg, var(--neon-pink), var(--neon-gold), var(--neon-cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .container { padding: 2rem 1rem; }
+    .achievement { padding: 2rem 1.5rem; }
+    .section-header::before,
+    .section-header::after { display: none; }
+    .achievement-stats { gap: 1.5rem; }
+    .grade { width: 42px; height: 50px; font-size: 1.2rem; }
+    .stat-number { font-size: 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="grid-floor"></div>
+<div class="scanlines"></div>
+<div class="noise"></div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">SYSTEM // YEAR_RECAP_2026.exe</div>
+    <h1 class="hero-title">
+      <span class="gradient">HAPPY</span><br>
+      BIRTHDAY
+    </h1>
+    <div class="hero-subtitle">给我的儿子，最棒的一年</div>
+    <div class="hero-name">[ 在这里填儿子名字 ]</div>
+    <div class="hero-meta">
+      <span>STATUS: LEVEL UP ✦</span>
+      <span>YEAR: 2025—2026</span>
+      <span>ACHIEVEMENTS: 02</span>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-banner reveal">
+    <div class="stat">
+      <div class="stat-number">5</div>
+      <div class="stat-label">A Grades</div>
+      <div class="stat-zh">优秀成绩</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">1</div>
+      <div class="stat-label">A- Grade</div>
+      <div class="stat-zh">学霸认证</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">5</div>
+      <div class="stat-label">GPUs Sold</div>
+      <div class="stat-zh">小小创业家</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">∞</div>
+      <div class="stat-label">Pride Level</div>
+      <div class="stat-zh">老爸的骄傲</div>
+    </div>
+  </section>
+
+  <!-- SECTION HEADER -->
+  <div class="section-header reveal">
+    <div class="section-eyebrow">// Achievements Unlocked</div>
+    <h2 class="section-title">这一年的高光时刻</h2>
+  </div>
+
+  <!-- ACHIEVEMENTS -->
+  <section class="achievements">
+
+    <!-- Achievement 1: Academic -->
+    <div class="achievement reveal">
+      <div class="achievement-header">
+        <div class="achievement-badge badge-academic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2L15 8.5L22 9.5L17 14.5L18 21.5L12 18L6 21.5L7 14.5L2 9.5L9 8.5L12 2Z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="achievement-title-block">
+          <div class="achievement-id">ACHIEVEMENT #01 · ACADEMIC EXCELLENCE</div>
+          <h3 class="achievement-title">学神附体的一学期</h3>
+          <div class="achievement-subtitle">5×A + 1×A-  //  PERFECT_RUN.log</div>
+        </div>
+      </div>
+      <div class="achievement-body">
+        别人考试在抓头发，你在拿A。别人在补习班加班加点，你已经把成绩单变成了一张奖状。
+        五个A加一个A-，这不是运气，这是你一晚一晚熬出来的实力。爸爸知道，每一分背后都是你的认真。
+      </div>
+      <div class="grade-row">
+        <div class="grade">A</div>
+        <div class="grade">A</div>
+        <div class="grade">A</div>
+        <div class="grade">A</div>
+        <div class="grade">A</div>
+        <div class="grade minus">A-</div>
+      </div>
+      <div class="achievement-stats">
+        <div class="achievement-stat">
+          <div class="achievement-stat-val">5</div>
+          <div class="achievement-stat-key">PERFECT A</div>
+        </div>
+        <div class="achievement-stat">
+          <div class="achievement-stat-val">A-</div>
+          <div class="achievement-stat-key">CLOSE TO PERFECT</div>
+        </div>
+        <div class="achievement-stat">
+          <div class="achievement-stat-val">98%</div>
+          <div class="achievement-stat-key">DAD PRIDE INDEX</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievement 2: Business -->
+    <div class="achievement reveal">
+      <div class="achievement-header">
+        <div class="achievement-badge badge-business">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M3 7H21V17H3V7Z" fill="currentColor"/>
+            <path d="M7 11H17M7 13H13" stroke="#0a0418" stroke-width="1.5"/>
+            <circle cx="6" cy="9" r="0.8" fill="#0a0418"/>
+          </svg>
+        </div>
+        <div class="achievement-title-block">
+          <div class="achievement-id">ACHIEVEMENT #02 · ENTREPRENEUR MODE</div>
+          <h3 class="achievement-title">eBay 上的小老板</h3>
+          <div class="achievement-subtitle">5×GPU SOLD  //  HUSTLE_LEVEL_MAX.exe</div>
+        </div>
+      </div>
+      <div class="achievement-body">
+        14岁的人懂市场，懂定价，懂物流。在eBay上一口气卖出5张显卡，这不是儿戏 ——
+        这是研究、谈判、打包、发货一条龙的真本事。爸爸第一次发现，原来你已经长成一个会做生意的人了。
+        下一次牛市来，可能就轮到你给爸爸荐股了。
+      </div>
+      <div class="gpu-row">
+        <div class="gpu"><span class="gpu-icon"></span>GPU_01 · SOLD</div>
+        <div class="gpu"><span class="gpu-icon"></span>GPU_02 · SOLD</div>
+        <div class="gpu"><span class="gpu-icon"></span>GPU_03 · SOLD</div>
+        <div class="gpu"><span class="gpu-icon"></span>GPU_04 · SOLD</div>
+        <div class="gpu"><span class="gpu-icon"></span>GPU_05 · SOLD</div>
+      </div>
+      <div class="achievement-stats">
+        <div class="achievement-stat">
+          <div class="achievement-stat-val">5/5</div>
+          <div class="achievement-stat-key">UNITS SOLD</div>
+        </div>
+        <div class="achievement-stat">
+          <div class="achievement-stat-val">100%</div>
+          <div class="achievement-stat-key">SUCCESS RATE</div>
+        </div>
+        <div class="achievement-stat">
+          <div class="achievement-stat-val">★★★★★</div>
+          <div class="achievement-stat-key">SELLER RATING</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- DAD MESSAGE -->
+  <section class="message-card reveal">
+    <div class="message-eyebrow">// MESSAGE FROM DAD</div>
+    <p class="message-text">
+      儿子，这一年你做的每一件事，都让爸爸觉得骄傲。<br>
+      不只是因为你拿了A，也不只是因为你会赚钱 ——<br>
+      而是因为你在认真地长大，认真地变成一个我会仰望的人。<br>
+      <br>
+      生日快乐。爱你，永远。
+    </p>
+    <div class="message-signature">— DAD · 2026 —</div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-glow">★ LEVEL UP ★</div>
+    <div>HAPPY BIRTHDAY · 生日快乐 · 永远爱你</div>
+  </footer>
+
+</div>
+
+<script>
+  // 滚动渐入
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // 数字滚动动画
+  const animateNumber = (el, target) => {
+    if (target === '∞' || target === '5/5' || target === '100%' || target === '98%' || target === 'A-' || target.includes('★')) return;
+    const num = parseInt(target);
+    if (isNaN(num)) return;
+    let current = 0;
+    const step = num / 30;
+    const tick = () => {
+      current += step;
+      if (current >= num) {
+        el.textContent = target;
+      } else {
+        el.textContent = Math.floor(current);
+        requestAnimationFrame(tick);
+      }
+    };
+    tick();
+  };
+
+  const numberObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const target = entry.target.textContent;
+        animateNumber(entry.target, target);
+        numberObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.stat-number, .achievement-stat-val').forEach(el => {
+    numberObserver.observe(el);
+  });
+</script>
+
+</body>
+</html>
